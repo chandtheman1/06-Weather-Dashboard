@@ -1,0 +1,17 @@
+:root {
+
+}
+
+h1 {
+    text-align: center;
+    padding: 10px;
+    font-size: 40px;
+    background-image: linear-gradient(to right,rgb(94, 105, 202), rgb(0, 5, 75));
+    color: white;
+}
+
+.sidebar {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-evenly;
+}
