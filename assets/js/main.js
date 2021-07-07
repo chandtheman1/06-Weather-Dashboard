@@ -1,9 +1,10 @@
-var cityEl =  document.querySelector(".city-input");
+var cityInputEl =  document.querySelector(".city-input");
 var searchEl = document.querySelector(".search");
 var mainCityEl = document.querySelector(".main-city");
 var searchFunctionEl = document.querySelector(".search-function");
 var forecastEl = document.querySelector(".forecast");
 var multipleCityEl = document.querySelector(".multiple-city");
+var cityEl = document.querySelector(".city");
 
 
 
@@ -71,9 +72,9 @@ searchEl.addEventListener("click", function() {
     removeElements();
 
             
-    var city = cityEl.value.trim();
+    var city = cityInputEl.value.trim();
     var queryMapURL = mapURL + city + "&format=jsonv2";
-    cityEl.value = "";
+    cityInputEl.value = "";
     
     getMapApi(queryMapURL);
     
@@ -91,7 +92,7 @@ function removeElements() {
 
 function createMainCity(data) { 
     console.log(data);
-    var divEl = document.createElement("div")
+    
     var h3El = document.createElement("h3");
     var p1El = document.createElement("p");
     var p2El = document.createElement("p");
@@ -100,7 +101,7 @@ function createMainCity(data) {
     var spanEl = document.createElement("span");
     var imgEl = document.createElement("img");
 
-    divEl.classList.add("city");
+   
 
     p1El.textContent = "Temp: " + data.current.temp + "°C";
     p2El.textContent = "Wind: " + data.current.wind_speed + "km/h";
@@ -124,13 +125,13 @@ function createMainCity(data) {
 
     spanEl.classList.add("uv-low");
 
-    mainCityEl.append(divEl);
-    divEl.append(h3El);
-    divEl.append(imgEl);
-    divEl.append(p1El);
-    divEl.append(p2El);
-    divEl.append(p3El);
-    divEl.append(p4El);
+    
+    cityEl.append(h3El);
+    cityEl.append(imgEl);
+    cityEl.append(p1El);
+    cityEl.append(p2El);
+    cityEl.append(p3El);
+    cityEl.append(p4El);
     p4El.append(spanEl);
 
 }
@@ -161,3 +162,4 @@ function forecastCity(data) {
         sectionEl.append(p3El);
     }
 }
+
