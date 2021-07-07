@@ -3,36 +3,48 @@ var searchEl = document.querySelector(".search");
 var mainCityEl = document.querySelector(".main-city");
 var searchFunctionEl = document.querySelector(".search-function");
 var forecastEl = document.querySelector(".forecast");
+var multipleCityEl = document.querySelector(".multiple-city");
+
 
 
 var APIKey = "5328e04cbea129ba9d5674e8f71d661f";
 var startQueryURL = "https://api.openweathermap.org/data/2.5/onecall?appid=" + APIKey + "&units=metric&exclude=alerts,minutely,hourly";
 
 
-var queryMapURL = "https://nominatim.openstreetmap.org/search.php?city=sydney&format=jsonv2"
 
-function getMapApi() {
+
+function getMapApi(queryMapURL) {
     fetch(queryMapURL)
         .then(function (response) {
             return response.json();
+            // console.log(response);
         })
         .then(function (data) {
 
-            for (let i = 0; i < 3; i++) {
-                var mapCityResult = document.createElement('button');
-                mapCityResult.textContent = data[i].display_name;
-                searchFunctionEl.appendChild(mapCityResult);
+            //checks if the location inputted is valid
+            if (data.length == 0) {
+                alert("Location not found");
+            } else {
+                
+                for (let i = 0; i < 3; i++) {
+                    var mapCityResult = document.createElement('button');
+                    mapCityResult.textContent = data[i].display_name;
+                    mapCityResult.classList.add("mapButton");
+                    searchFunctionEl.appendChild(mapCityResult);
 
-                mapCityResult.addEventListener("click", function(){
+                    mapCityResult.addEventListener("click", function(){
            
-                    var lon = data[i].lon;
-                    var lat = data[i].lat;
+                        var lon = data[i].lon;
+                        var lat = data[i].lat;
 
-                    constructURL(lat, lon);
+                        constructURL(lat, lon);
 
                 }, false);
-            }
+            }            
+        }
         })
+    
+        
 }
 
 function getWeatherApi(queryURL) {
@@ -52,11 +64,29 @@ function constructURL(lat, lon) {
     getWeatherApi(queryURL);
 }
 
-
+var mapURL = "https://nominatim.openstreetmap.org/search.php?city="
 
 searchEl.addEventListener("click", function() {
-    getMapApi();
+    
+    removeElements();
+
+            
+    var city = cityEl.value.trim();
+    var queryMapURL = mapURL + city + "&format=jsonv2";
+    cityEl.value = "";
+    
+    getMapApi(queryMapURL);
+    
+
 });
+
+function removeElements() {
+    mapButtonEl = document.querySelectorAll(".mapButton");
+    mapButtonEl.forEach(element => {
+        element.parentNode.removeChild(element);
+    });
+
+}
 
 
 function createMainCity(data) { 
@@ -105,14 +135,6 @@ function createMainCity(data) {
 
 }
 
-// function weatherIcon(data) {
-//     var iEL = document.createElement("i");
-//     if (data == "Clouds") {
-//         iEL.classList.add("fas fa-cloud")
-//     } else if (data == ){
-
-//     }
-// }
 
 function forecastCity(data) {
     for (var i = 1; i < 6; i++) {
@@ -137,6 +159,5 @@ function forecastCity(data) {
         sectionEl.append(p1El);
         sectionEl.append(p2El);
         sectionEl.append(p3El);
-
     }
 }
