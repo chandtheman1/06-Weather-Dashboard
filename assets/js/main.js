@@ -42,6 +42,7 @@ function getWeatherApi(queryURL) {
         })
         .then(function (data) {
             createMainCity(data);
+            forecastCity(data);
         })
 }
 
@@ -113,17 +114,29 @@ function createMainCity(data) {
 //     }
 // }
 
-// function forecastCity() {
-//     for (var i = 1; i < 6; i++) {
-//         var sectionEl = document.createElement("section")
-//         var h4El = document.createElement("h4");
-//         var p1El = document.createElement("p");
-//         var p2El = document.createElement("p");
-//         var p3El = document.createElement("p");
-//         var imgEl = document.createElement("img");
+function forecastCity(data) {
+    for (var i = 1; i < 6; i++) {
+        var sectionEl = document.createElement("section")
+        var h4El = document.createElement("h4");
+        var p1El = document.createElement("p");
+        var p2El = document.createElement("p");
+        var p3El = document.createElement("p");
+        var imgEl = document.createElement("img");
 
-//         sectionEl.classList.add("card");
+        sectionEl.classList.add("card");
 
-//         h4El.textContent = moment().
-//     }
-// }
+        h4El.textContent = moment().add(i, 'day').format('L');
+        imgEl.setAttribute("src", "http://openweathermap.org/img/wn/" + data.daily[i].weather[0].icon + "@2x.png");
+        p1El.textContent = "Temp: " + data.daily[i].temp.max + "°C";
+        p2El.textContent = "Wind: " + data.daily[i].wind_speed + "km/h";
+        p3El.textContent = "Humidity: " + data.daily[i].humidity + "%";
+
+        forecastEl.append(sectionEl);
+        sectionEl.append(h4El);
+        sectionEl.append(imgEl);
+        sectionEl.append(p1El);
+        sectionEl.append(p2El);
+        sectionEl.append(p3El);
+
+    }
+}
