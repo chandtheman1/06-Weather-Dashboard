@@ -13,7 +13,14 @@ var APIKey = "5328e04cbea129ba9d5674e8f71d661f";
 var startQueryURL = "https://api.openweathermap.org/data/2.5/onecall?appid=" + APIKey + "&units=metric&exclude=alerts,minutely,hourly";
 
 
-var savedCity = JSON.parse(localStorage.getItem("city"));
+if (JSON.parse(localStorage.getItem("city")) == null) {
+    var savedCity = [];
+} else {
+    var savedCity = JSON.parse(localStorage.getItem("city"));
+}
+
+
+// var savedCity = JSON.parse(localStorage.getItem("city"));
 
 function getMapApi(queryMapURL) {
     fetch(queryMapURL)
@@ -53,10 +60,11 @@ function getMapApi(queryMapURL) {
 
                         
                         savedCity.push(data[i]); 
-                        saveStorage();
+                        saveStorage(data[i]);
                         
                         var buttonEl = document.createElement("button");
 
+                        // var nameString = element.display_name.split(",");
                         buttonEl.textContent = nameString[0] + ", " + nameString[nameString.length - 1];
                         historyEl.append(buttonEl);
                 
@@ -101,8 +109,15 @@ searchEl.addEventListener("click", function() {
     
     getMapApi(queryMapURL);
     
-
+    
 });
+
+
+
+// function resolveName (data) {
+//     console.log(data.length);
+// }
+
 
 function removeElements() {
     mapButtonEl = document.querySelectorAll(".mapButton");
@@ -120,7 +135,27 @@ function removeElements() {
 
 
 function createMainCity(data) { 
-    console.log(data);
+    console.log(data.lat, data.lon);
+    var lat = data.lat;
+    var lon = data.lon;
+
+
+
+    function reverseMapApi (lat, lon) {
+        fetch("https://nominatim.openstreetmap.org/reverse.php?lat=" + lat + "&lon=" + lon + "&format=jsonv2")
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                return data;
+
+            }
+            )
+    }
+    // nameEl = reverseMapApi(data.lat, data.lon);
+    // console.log(nameEl);
+    var nameEl = reverseMapApi(lat, lon);
+    console.log(nameEl);
     
     var p1El = document.createElement("p");
     var p2El = document.createElement("p");
@@ -197,7 +232,7 @@ function retrieveStorage() {
 
 
     var retrievedCity = JSON.parse(localStorage.getItem("city"));
-    console.log(retrievedCity);
+    // console.log(retrievedCity);
     retrievedCity.forEach(element => {
         var buttonEl = document.createElement("button");
 
@@ -216,4 +251,8 @@ function retrieveStorage() {
     savedCity.concat(retrievedCity);
 }
 
+
 retrieveStorage();
+
+
+
