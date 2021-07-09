@@ -111,6 +111,8 @@ h4 {
     color: rgb(255, 255, 255);
 }
 
+/* Different types of UV for each background */
+
 .uv-low {
     background-color: rgb(103, 172, 103);
     padding: 5px;
@@ -136,13 +138,15 @@ h4 {
     padding: 5px;
 }
 
+/* search button color*/
+
 .color-search {
     background-color: rgb(48, 145, 184); 
 }
 
 @media screen and (max-width: 768px) {
    .main-city, .forecast, .city {
-       
+
        flex-direction: column;
        
    } 

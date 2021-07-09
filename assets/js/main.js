@@ -8,39 +8,34 @@ var cityEl = document.querySelector(".city");
 var historyEl = document.querySelector(".history");
 
 
-
+//API key
 var APIKey = "5328e04cbea129ba9d5674e8f71d661f";
+//API open weather URL
 var startQueryURL = "https://api.openweathermap.org/data/2.5/onecall?appid=" + APIKey + "&units=metric&exclude=alerts,minutely,hourly";
+//API nominatim URL
+var mapURL = "https://nominatim.openstreetmap.org/search.php?city="
 
-
+//local storage
 if (JSON.parse(localStorage.getItem("city")) == null) {
     var savedCity = [];
 } else {
     var savedCity = JSON.parse(localStorage.getItem("city"));
 }
 
-
-// var savedCity = JSON.parse(localStorage.getItem("city"));
-
+//API call that resolves names of cities to latitudes and longtitudes
 function getMapApi(queryMapURL) {
     fetch(queryMapURL)
         .then(function (response) {
             return response.json();
-            // console.log(response);
         })
         .then(function (data) {
 
-            // var cityName = data[0].display_name.split(",")[0];
-            // var h3El = document.createElement("h3");
-            // h3El.textContent = cityName;
-            // cityEl.append(h3El);
-            // h3El.classList.add("clear");
 
             //checks if the location inputted is valid
             if (data.length == 0) {
                 alert("Location not found");
             } else {
-                
+            //creates more selections that finds similar city names but in different countries
                 for (let i = 0; i < 3; i++) {
                     
                     
@@ -64,7 +59,6 @@ function getMapApi(queryMapURL) {
                         
                         var buttonEl = document.createElement("button");
 
-                        // var nameString = element.display_name.split(",");
                         buttonEl.textContent = nameString[0] + ", " + nameString[nameString.length - 1];
                         historyEl.append(buttonEl);
                 
@@ -80,6 +74,7 @@ function getMapApi(queryMapURL) {
         })
 }
 
+//open weather API call
 function getWeatherApi(queryURL) {
     fetch(queryURL)
         .then(function (response) {
@@ -91,14 +86,15 @@ function getWeatherApi(queryURL) {
         })
 }
 
-
+//adds the lat and lon into open weather URL
 function constructURL(lat, lon) {
     var queryURL = startQueryURL + "&lat=" + lat + "&lon=" + lon;
     getWeatherApi(queryURL);
 }
 
-var mapURL = "https://nominatim.openstreetmap.org/search.php?city="
 
+
+//function that calls open weather
 searchEl.addEventListener("click", function() {
     
     removeElements();
@@ -113,11 +109,7 @@ searchEl.addEventListener("click", function() {
 });
 
 
-
-// function resolveName (data) {
-//     console.log(data.length);
-// }
-
+//removes the main card and forecast card
 
 function removeElements() {
     mapButtonEl = document.querySelectorAll(".mapButton");
@@ -133,14 +125,15 @@ function removeElements() {
 
 }
 
+//creates the main card and extracts the API call data
 
 function createMainCity(data) { 
-    // console.log(data.lat, data.lon);
+
     var lat = data.lat;
     var lon = data.lon;
 
 
-
+    //this function helps resolves the names of the city, by reversing resolving from lat and lon to city name
     function reverseMapApi (lat, lon) {
         fetch("https://nominatim.openstreetmap.org/reverse.php?lat=" + lat + "&lon=" + lon + "&format=jsonv2")
             .then(function (response) {
@@ -157,8 +150,7 @@ function createMainCity(data) {
             }
             )
     }
-    // nameEl = reverseMapApi(data.lat, data.lon);
-    // console.log(nameEl);
+
     var nameEl = reverseMapApi(lat, lon);
     
     
@@ -176,8 +168,10 @@ function createMainCity(data) {
     p3El.textContent = "Humidity: " + data.current.humidity + "%";
     p4El.textContent = "UV Index: ";
     spanEl.textContent = data.daily[0].uvi;
-
+    //displays the image
     imgEl.setAttribute("src", "http://openweathermap.org/img/wn/" + data.daily[0].weather[0].icon + "@2x.png");
+
+    // UV function that shows background colors depending on severity
 
     if (data.daily[0].uvi <= 2) {
         spanEl.classList.add("uv-low");
@@ -202,7 +196,7 @@ function createMainCity(data) {
 
 }
 
-
+//function that displays the forecast data as a loop
 function forecastCity(data) {
     for (var i = 1; i < 6; i++) {
         var sectionEl = document.createElement("section")
@@ -235,11 +229,12 @@ function saveStorage() {
     localStorage.setItem("city", JSON.stringify(savedCity));
 }
 
+//function that retrieves from local storage and displays as history buttons
 function retrieveStorage() {
 
 
     var retrievedCity = JSON.parse(localStorage.getItem("city"));
-    // console.log(retrievedCity);
+
     retrievedCity.forEach(element => {
         var buttonEl = document.createElement("button");
 
@@ -258,7 +253,7 @@ function retrieveStorage() {
     savedCity.concat(retrievedCity);
 }
 
-
+//initialises the button
 retrieveStorage();
 
 
