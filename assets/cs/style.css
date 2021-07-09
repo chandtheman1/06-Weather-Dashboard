@@ -66,9 +66,9 @@ button {
 .city {
     flex: 1;
     flex-direction: row;
-    border: 2px, solid, black;
-    border-style: solid;
+    border: 10px, solid, black;
     padding: 30px;
+    background-color: rgb(48, 145, 184); 
 }
 
 h3 {
@@ -134,4 +134,16 @@ h4 {
 .uv-extremely-high {
     background-color: rgb(94, 36, 86);
     padding: 5px;
+}
+
+.color-search {
+    background-color: rgb(48, 145, 184); 
+}
+
+@media screen and (max-width: 768px) {
+   .main-city, .forecast, .city {
+       
+       flex-direction: column;
+       
+   } 
 }

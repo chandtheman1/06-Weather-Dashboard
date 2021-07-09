@@ -47,7 +47,7 @@ function getMapApi(queryMapURL) {
                     var mapCityResult = document.createElement('button');
                     var nameString = data[i].display_name.split(",");
                     mapCityResult.textContent = nameString[0] + ", " + nameString[nameString.length - 1];
-                    mapCityResult.classList.add("mapButton");
+                    mapCityResult.classList.add("mapButton", "color-search");
                     searchFunctionEl.appendChild(mapCityResult);
 
                     mapCityResult.addEventListener("click", function(){
@@ -135,7 +135,7 @@ function removeElements() {
 
 
 function createMainCity(data) { 
-    console.log(data.lat, data.lon);
+    // console.log(data.lat, data.lon);
     var lat = data.lat;
     var lon = data.lon;
 
@@ -147,7 +147,12 @@ function createMainCity(data) {
                 return response.json();
             })
             .then(function (data) {
-                return data;
+
+                var cityName = data.address.city.trim();
+                var h3El = document.createElement("h3");
+                h3El.textContent = cityName;
+                cityEl.append(h3El);
+                h3El.classList.add("clear");
 
             }
             )
@@ -155,7 +160,7 @@ function createMainCity(data) {
     // nameEl = reverseMapApi(data.lat, data.lon);
     // console.log(nameEl);
     var nameEl = reverseMapApi(lat, lon);
-    console.log(nameEl);
+    
     
     var p1El = document.createElement("p");
     var p2El = document.createElement("p");
@@ -187,6 +192,8 @@ function createMainCity(data) {
     }
 
     spanEl.classList.add("uv-low");
+
+
 
     elementArray.forEach(element => cityEl.append(element));
     p4El.append(spanEl);
